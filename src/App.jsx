@@ -1,10 +1,16 @@
 import { useState } from 'react'
-import { Menu, X, Sparkles } from 'lucide-react'
-import { TOOLS } from './utils/tools.js'
+import { Menu, Sparkles, ArrowLeft } from 'lucide-react'
+import { CATEGORIES, TOOLS } from './utils/tools.js'
+import LandingPage from './pages/LandingPage.jsx'
 
 export default function App() {
+  const [view, setView] = useState('landing') // 'landing' | 'app'
   const [activeId, setActiveId] = useState(TOOLS[0].id)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  if (view === 'landing') {
+    return <LandingPage onEnter={() => setView('app')} />
+  }
 
   const active = TOOLS.find((t) => t.id === activeId) ?? TOOLS[0]
   const ActiveComponent = active.component
@@ -18,7 +24,7 @@ export default function App() {
     <div className="flex h-screen w-screen overflow-hidden bg-bg text-text">
       {/* Sidebar (desktop) */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-surface md:flex">
-        <SidebarContent activeId={activeId} onSelect={selectTool} />
+        <SidebarContent activeId={activeId} onSelect={selectTool} onBack={() => setView('landing')} />
       </aside>
 
       {/* Sidebar (mobile, overlay) */}
@@ -29,7 +35,7 @@ export default function App() {
             onClick={() => setSidebarOpen(false)}
           />
           <aside className="relative z-50 flex h-full w-72 flex-col border-r border-border bg-surface animate-fade-in">
-            <SidebarContent activeId={activeId} onSelect={selectTool} />
+            <SidebarContent activeId={activeId} onSelect={selectTool} onBack={() => setView('landing')} />
           </aside>
         </div>
       )}
@@ -62,7 +68,7 @@ export default function App() {
   )
 }
 
-function SidebarContent({ activeId, onSelect }) {
+function SidebarContent({ activeId, onSelect, onBack }) {
   return (
     <>
       <div className="flex items-center justify-between border-b border-border px-5 py-5">
@@ -73,27 +79,43 @@ function SidebarContent({ activeId, onSelect }) {
             <p className="text-xs text-text-dim">Frontend utility generators</p>
           </div>
         </div>
+        <button
+          onClick={onBack}
+          title="Back to home"
+          className="rounded-lg border border-border bg-surface-2 p-1.5 text-text-dim transition hover:text-text"
+        >
+          <ArrowLeft size={15} />
+        </button>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-        {TOOLS.map((tool) => {
-          const Icon = tool.icon
-          const active = tool.id === activeId
-          return (
-            <button
-              key={tool.id}
-              onClick={() => onSelect(tool.id)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-                active
-                  ? 'bg-accent/15 text-accent'
-                  : 'text-text-dim hover:bg-surface-2 hover:text-text'
-              }`}
-            >
-              <Icon size={17} className="shrink-0" />
-              {tool.label}
-            </button>
-          )
-        })}
+      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
+        {CATEGORIES.map((cat) => (
+          <div key={cat.name}>
+            <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-text-dim/70">
+              {cat.name}
+            </p>
+            <div className="space-y-1">
+              {cat.tools.map((tool) => {
+                const Icon = tool.icon
+                const active = tool.id === activeId
+                return (
+                  <button
+                    key={tool.id}
+                    onClick={() => onSelect(tool.id)}
+                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                      active
+                        ? 'bg-accent/15 text-accent'
+                        : 'text-text-dim hover:bg-surface-2 hover:text-text'
+                    }`}
+                  >
+                    <Icon size={16} className="shrink-0" />
+                    {tool.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       <div className="border-t border-border px-5 py-4 text-xs text-text-dim">
