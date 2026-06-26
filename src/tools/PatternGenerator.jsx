@@ -6,6 +6,8 @@ import CodeBlock from '../components/CodeBlock.jsx'
 import ColorInput from '../components/ColorInput.jsx'
 import Slider from '../components/Slider.jsx'
 import ToggleGroup from '../components/ToggleGroup.jsx'
+import DiceButton from '../components/DiceButton.jsx'
+import { randomizers } from '../utils/randomizers.js'
 
 const PATTERNS = ['stripes', 'dots', 'checkerboard', 'grid', 'diagonal-lines', 'zigzag']
 
@@ -59,6 +61,15 @@ export default function PatternGenerator() {
         <>
           <SectionCard title="Pattern Type">
             <ToggleGroup options={PATTERNS} value={pattern} onChange={setPattern} />
+            <div className="mt-3">
+              <DiceButton onClick={() => {
+                const r = randomizers.pattern()
+                setPattern(r.pattern)
+                setFg(r.fg)
+                setBg(r.bg)
+                setSize(r.size)
+              }} />
+            </div>
           </SectionCard>
           <SectionCard title="Settings">
             <div className="space-y-4">
