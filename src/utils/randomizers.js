@@ -18,6 +18,22 @@ function hslToHex(h, s, l) {
 }
 
 export const randomizers = {
+  cardStudio: () => {
+    const [h1, h2] = pick(HUE_PAIRS)
+    const style = pick(['minimal', 'glass', 'neumorphism', 'neon', 'brutalist'])
+    const accentSaturation = rng(70, 92)
+    const bgHue = rng(210, 245)
+    return {
+      style,
+      bg: hslToHex(bgHue, rng(18, 28), rng(10, 16)),
+      color1: hslToHex(h1, accentSaturation, 58),
+      color2: hslToHex(h2, accentSaturation, 52),
+      radius: pick([0, 8, 12, 16, 20, 24, 32, 48]),
+      padding: pick([16, 20, 24, 28, 32]),
+      width: pick([220, 240, 280, 320, 360]),
+    }
+  },
+
   gradient: () => {
     const [h1, h2] = pick(HUE_PAIRS)
     const s = rng(65, 95)

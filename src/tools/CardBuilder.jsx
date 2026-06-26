@@ -96,9 +96,12 @@ export default function CardBuilder() {
             <div className="mt-3">
               <DiceButton onClick={() => {
                 const r = randomizers.cardStudio()
+                setStyle(r.style)
+                setBg(r.bg)
                 setAccent(r.color1)
-                setBg('#1c2027')
                 setRadius(r.radius)
+                setPadding(r.padding)
+                setWidth(r.width)
               }} />
             </div>
           </SectionCard>
@@ -122,9 +125,9 @@ export default function CardBuilder() {
         </>
       }
       preview={
-        <PreviewBox height="h-80" className={style === 'glass' || style === 'neon' ? 'bg-gradient-to-br from-accent/30 via-purple-500/20 to-accent-2/30' : ''}>
+        <PreviewBox height="h-80" className={style === 'glass' || style === 'neon' ? 'bg-linear-to-br from-accent/30 via-purple-500/20 to-accent-2/30' : ''}>
           <div style={cardStyle} className="flex flex-col gap-3 text-white">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-accent to-accent-2" />
+            <div className="h-8 w-8 rounded-full bg-linear-to-br from-accent to-accent-2" />
             <div className="text-base font-semibold text-text">Card Title</div>
             <div className="text-sm text-text-dim">A reusable card component built from combined CSS effects.</div>
           </div>
