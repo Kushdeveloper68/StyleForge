@@ -157,14 +157,14 @@ function ThemeToggle() {
   )
 }
 
-function SidebarContent({ activeId, onSelect, onBack, onSearch }) {
+function SidebarContent({ activeId, onSelect, onBack, onSearch, onSaved, savedCount = 0 }) {
   return (
     <>
       <div className="flex items-center justify-between border-b border-border px-5 py-5">
         <div className="flex items-center gap-2">
           <Sparkles size={20} className="text-accent" />
           <div>
-            <h1 className="text-base font-semibold tracking-tight">CSS Toolkit</h1>
+            <h1 className="text-base font-semibold tracking-tight">StyleForge</h1>
             <p className="text-xs text-text-dim">Frontend utility generators</p>
           </div>
         </div>
@@ -180,16 +180,28 @@ function SidebarContent({ activeId, onSelect, onBack, onSearch }) {
         </div>
       </div>
 
-      <div className="px-3 pt-3">
+      <div className="flex gap-2 px-3 pt-3">
         <button
           onClick={onSearch}
-          className="flex w-full items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-dim transition hover:text-text"
+          className="flex flex-1 items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-dim transition hover:text-text"
         >
           <Search size={14} />
           Search tools...
           <kbd className="ml-auto rounded border border-border bg-surface px-1.5 py-0.5 text-[10px]">
             ⌘K
           </kbd>
+        </button>
+        <button
+          onClick={onSaved}
+          title="Saved styles"
+          className="relative flex items-center justify-center rounded-lg border border-border bg-surface-2 p-2 text-text-dim transition hover:text-accent"
+        >
+          <Bookmark size={15} />
+          {savedCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-white">
+              {savedCount > 9 ? '9+' : savedCount}
+            </span>
+          )}
         </button>
       </div>
 

@@ -13,6 +13,27 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* Light mode — applied when <html class="light"> */
+html.light {
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef0f3;
+  --color-border: #dde1e8;
+  --color-text: #111318;
+  --color-text-dim: #6b7280;
+  --color-accent: #6366f1;
+  --color-accent-2: #0891b2;
+}
+
+html.light .bg-checkerboard {
+  background-image:
+    linear-gradient(45deg, #dde1e8 25%, transparent 25%),
+    linear-gradient(-45deg, #dde1e8 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #dde1e8 75%),
+    linear-gradient(-45deg, transparent 75%, #dde1e8 75%);
+  background-color: #eef0f3;
+}
+
 * {
   box-sizing: border-box;
 }
