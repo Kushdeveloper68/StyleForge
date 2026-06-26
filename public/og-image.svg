@@ -1,0 +1,30 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1080" y2="590" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B0D10"/>
+      <stop offset="0.55" stop-color="#14171C"/>
+      <stop offset="1" stop-color="#0E1014"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="220" y1="120" x2="980" y2="520" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366F1"/>
+      <stop offset="0.55" stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+    <filter id="blur" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="36"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="44" fill="url(#bg)"/>
+  <circle cx="260" cy="150" r="120" fill="#6366F1" fill-opacity="0.22" filter="url(#blur)"/>
+  <circle cx="940" cy="140" r="150" fill="#22D3EE" fill-opacity="0.18" filter="url(#blur)"/>
+  <circle cx="930" cy="500" r="180" fill="#A855F7" fill-opacity="0.16" filter="url(#blur)"/>
+  <rect x="88" y="90" width="1024" height="450" rx="34" stroke="rgba(255,255,255,0.09)" fill="rgba(255,255,255,0.02)"/>
+  <rect x="128" y="132" width="124" height="124" rx="28" fill="url(#accent)"/>
+  <path d="M177 166L208 197L177 228L146 197L177 166Z" fill="white" fill-opacity="0.95"/>
+  <path d="M193 181H210V214H193V181Z" fill="white" fill-opacity="0.9"/>
+  <text x="128" y="334" fill="#F3F4F6" font-family="Inter, Arial, sans-serif" font-size="74" font-weight="700" letter-spacing="-1.8">StyleForge</text>
+  <text x="128" y="390" fill="#C7CDD6" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500">Creative CSS toolkit for frontend UI work</text>
+  <text x="128" y="448" fill="#9AA3AF" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="400">Gradients • Layout • Shadows • Glassmorphism • Shapes • Accessibility</text>
+  <rect x="128" y="486" width="944" height="1.5" fill="rgba(255,255,255,0.12)"/>
+  <text x="128" y="532" fill="#E6E8EB" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="500">Live previews, copy-ready CSS, and a human-made landing experience.</text>
+</svg>
