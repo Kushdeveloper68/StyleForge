@@ -8,6 +8,8 @@ import ColorInput from '../components/ColorInput.jsx'
 import Slider from '../components/Slider.jsx'
 import ToggleGroup from '../components/ToggleGroup.jsx'
 import Button from '../components/Button.jsx'
+import DiceButton from '../components/DiceButton.jsx'
+import { randomizers } from '../utils/randomizers.js'
 
 const randomHex = () =>
   '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')
@@ -41,10 +43,10 @@ export default function GradientGenerator() {
   }
 
   const randomize = () => {
-    setStops((prev) =>
-      prev.map((s) => ({ ...s, color: randomHex() }))
-    )
-    if (type === 'linear') setAngle(Math.floor(Math.random() * 360))
+    const r = randomizers.gradient()
+    setType(r.type)
+    setAngle(r.angle)
+    setStops(r.stops)
   }
 
   const stopsCss = [...stops]
@@ -65,16 +67,20 @@ export default function GradientGenerator() {
 
   return (
     <ToolLayout
+      toolId="gradient"
       title="Gradient Generator"
       description="Build linear, radial, and conic gradients with multiple color stops."
       controls={
         <>
           <SectionCard title="Type">
-            <ToggleGroup
-              options={['linear', 'radial', 'conic']}
-              value={type}
-              onChange={setType}
-            />
+            <div className="flex items-center justify-between gap-2">
+              <ToggleGroup
+                options={['linear', 'radial', 'conic']}
+                value={type}
+                onChange={setType}
+              />
+              <DiceButton onClick={randomize} label="Random" />
+            </div>
           </SectionCard>
 
           {(type === 'linear' || type === 'conic') && (
@@ -151,9 +157,6 @@ export default function GradientGenerator() {
               <Button onClick={addStop} icon={Plus}>
                 Add Stop
               </Button>
-              <Button onClick={randomize} icon={Shuffle}>
-                Randomize
-              </Button>
             </div>
           </SectionCard>
         </>
@@ -166,7 +169,7 @@ export default function GradientGenerator() {
           />
         </PreviewBox>
       }
-      code={<CodeBlock code={code} />}
+      code={<CodeBlock code={code} previewStyle={{ background: gradientCss }} />}
     />
   )
 }

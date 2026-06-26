@@ -8,6 +8,8 @@ import ColorInput from '../components/ColorInput.jsx'
 import Slider from '../components/Slider.jsx'
 import ToggleGroup from '../components/ToggleGroup.jsx'
 import Button from '../components/Button.jsx'
+import DiceButton from '../components/DiceButton.jsx'
+import { randomizers } from '../utils/randomizers.js'
 
 let layerId = 0
 const newLayer = () => ({
@@ -51,6 +53,7 @@ export default function BoxShadowGenerator() {
 
   return (
     <ToolLayout
+      toolId="box-shadow"
       title="Box Shadow Generator"
       description="Stack multiple shadow layers for soft, realistic depth effects."
       controls={
@@ -81,9 +84,18 @@ export default function BoxShadowGenerator() {
                 </button>
               ))}
             </div>
-            <Button onClick={addLayer} icon={Plus}>
-              Add Layer
-            </Button>
+            <div className="mt-3 flex gap-2">
+              <Button onClick={addLayer} icon={Plus}>
+                Add Layer
+              </Button>
+              <DiceButton
+                onClick={() => {
+                  const r = randomizers.boxShadow()
+                  update(layers[activeIdx].id, r)
+                }}
+                label="Random"
+              />
+            </div>
           </SectionCard>
 
           <SectionCard title={`Layer ${activeIdx + 1} Settings`}>

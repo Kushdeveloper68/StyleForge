@@ -3,7 +3,7 @@ import {
   Scissors, SlidersHorizontal, Play, Spline, Type, Palette, Triangle,
   Blend, Repeat, MousePointerClick, Variable, Move3d, Box, MousePointer2,
   CircleDashed, Shapes, Waves, Sparkles, Ruler, Smartphone, Maximize2,
-  AlignVerticalSpaceAround, CaseSensitive, Contrast, SearchCheck, RectangleEllipsis,
+  AlignVerticalSpaceAround, CaseSensitive, Contrast, SearchCheck, RectangleEllipsis, LayoutTemplate, Wand2,
 } from 'lucide-react'
 
 import GradientGenerator from '../tools/GradientGenerator.jsx'
@@ -41,8 +41,17 @@ import TypographyScaleGenerator from '../tools/TypographyScaleGenerator.jsx'
 import ContrastChecker from '../tools/ContrastChecker.jsx'
 import GradientAnalyzer from '../tools/GradientAnalyzer.jsx'
 import ButtonGenerator from '../tools/ButtonGenerator.jsx'
+import CardBuilder from '../tools/CardBuilder.jsx'
+import ComponentStudio from '../tools/ComponentStudio.jsx'
 
 export const CATEGORIES = [
+  {
+    name: 'Composite',
+    tools: [
+      { id: 'component-studio', label: 'Component Studio', icon: Wand2, component: ComponentStudio },
+      { id: 'card-builder', label: 'Card Builder', icon: LayoutTemplate, component: CardBuilder },
+    ],
+  },
   {
     name: 'Visual Effects',
     tools: [

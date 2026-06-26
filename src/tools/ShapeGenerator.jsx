@@ -6,6 +6,8 @@ import CodeBlock from '../components/CodeBlock.jsx'
 import ColorInput from '../components/ColorInput.jsx'
 import Slider from '../components/Slider.jsx'
 import Button from '../components/Button.jsx'
+import DiceButton from '../components/DiceButton.jsx'
+import { randomizers } from '../utils/randomizers.js'
 import { Shuffle } from 'lucide-react'
 
 // Generates an organic blob border-radius value (8 corner percentages)
@@ -23,6 +25,7 @@ export default function ShapeGenerator() {
 
   return (
     <ToolLayout
+      toolId="shape"
       title="Shape (Blob) Generator"
       description="Generate organic blob shapes using border-radius — randomize until it looks right."
       controls={
@@ -34,9 +37,17 @@ export default function ShapeGenerator() {
             </div>
           </SectionCard>
           <SectionCard title="Shape">
-            <Button onClick={() => setRadius(randomBlobRadius())} icon={Shuffle}>
-              Randomize Blob
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => setRadius(randomBlobRadius())} icon={Shuffle}>
+                Randomize Blob
+              </Button>
+              <DiceButton onClick={() => {
+                const r = randomizers.shape()
+                setColor(r.color)
+                setSize(r.size)
+                setRadius(randomBlobRadius())
+              }} label="Full Random" />
+            </div>
           </SectionCard>
         </>
       }

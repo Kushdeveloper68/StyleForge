@@ -1,12 +1,56 @@
-import { useState } from 'react'
-import { Menu, Sparkles, ArrowLeft } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Menu, Sparkles, ArrowLeft, Search, Sun, Moon, Bookmark } from 'lucide-react'
 import { CATEGORIES, TOOLS } from './utils/tools.js'
 import LandingPage from './pages/LandingPage.jsx'
+import CommandPalette from './components/CommandPalette.jsx'
+import SavedStylesPanel from './components/SavedStylesPanel.jsx'
+import { useTheme } from './context/ThemeContext.jsx'
+import { useSavedStyles } from './context/SavedStylesContext.jsx'
+
+function getInitialTool() {
+  if (typeof window === 'undefined') return TOOLS[0].id
+  const params = new URLSearchParams(window.location.search)
+  const fromUrl = params.get('tool')
+  if (fromUrl && TOOLS.some((t) => t.id === fromUrl)) return fromUrl
+  return TOOLS[0].id
+}
 
 export default function App() {
-  const [view, setView] = useState('landing') // 'landing' | 'app'
-  const [activeId, setActiveId] = useState(TOOLS[0].id)
+  const [view, setView] = useState(() =>
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('tool')
+      ? 'app'
+      : 'landing'
+  )
+  const [activeId, setActiveId] = useState(getInitialTool)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
+  const [savedOpen, setSavedOpen] = useState(false)
+  const { saved } = useSavedStyles()
+
+  // Keep the URL in sync with the active tool while in app view
+  useEffect(() => {
+    if (view !== 'app') return
+    const url = new URL(window.location.href)
+    url.searchParams.set('tool', activeId)
+    window.history.replaceState({}, '', url)
+  }, [activeId, view])
+
+  // Cmd+K / Ctrl+K opens the command palette
+  useEffect(() => {
+    const handleKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setPaletteOpen(true)
+      }
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [])
+
+  const selectTool = useCallback((id) => {
+    setActiveId(id)
+    setSidebarOpen(false)
+  }, [])
 
   if (view === 'landing') {
     return <LandingPage onEnter={() => setView('app')} />
@@ -15,16 +59,21 @@ export default function App() {
   const active = TOOLS.find((t) => t.id === activeId) ?? TOOLS[0]
   const ActiveComponent = active.component
 
-  const selectTool = (id) => {
-    setActiveId(id)
-    setSidebarOpen(false)
-  }
-
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-bg text-text">
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} onSelect={selectTool} />
+      <SavedStylesPanel open={savedOpen} onClose={() => setSavedOpen(false)} />
+
       {/* Sidebar (desktop) */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-surface md:flex">
-        <SidebarContent activeId={activeId} onSelect={selectTool} onBack={() => setView('landing')} />
+        <SidebarContent
+          activeId={activeId}
+          onSelect={selectTool}
+          onBack={() => setView('landing')}
+          onSearch={() => setPaletteOpen(true)}
+          onSaved={() => setSavedOpen(true)}
+          savedCount={saved.length}
+        />
       </aside>
 
       {/* Sidebar (mobile, overlay) */}
@@ -35,7 +84,14 @@ export default function App() {
             onClick={() => setSidebarOpen(false)}
           />
           <aside className="relative z-50 flex h-full w-72 flex-col border-r border-border bg-surface animate-fade-in">
-            <SidebarContent activeId={activeId} onSelect={selectTool} onBack={() => setView('landing')} />
+            <SidebarContent
+              activeId={activeId}
+              onSelect={selectTool}
+              onBack={() => setView('landing')}
+              onSearch={() => setPaletteOpen(true)}
+              onSaved={() => setSavedOpen(true)}
+              savedCount={saved.length}
+            />
           </aside>
         </div>
       )}
@@ -48,12 +104,32 @@ export default function App() {
             <Sparkles size={18} className="text-accent" />
             <span className="font-semibold tracking-tight">CSS Toolkit</span>
           </div>
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="rounded-lg border border-border bg-surface-2 p-2 text-text-dim"
-          >
-            <Menu size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setSavedOpen(true)}
+              className="relative rounded-lg border border-border bg-surface-2 p-2 text-text-dim"
+            >
+              <Bookmark size={16} />
+              {saved.length > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[9px] font-bold text-white">
+                  {saved.length > 9 ? '9+' : saved.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setPaletteOpen(true)}
+              className="rounded-lg border border-border bg-surface-2 p-2 text-text-dim"
+            >
+              <Search size={18} />
+            </button>
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="rounded-lg border border-border bg-surface-2 p-2 text-text-dim"
+            >
+              <Menu size={18} />
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto">
@@ -68,7 +144,20 @@ export default function App() {
   )
 }
 
-function SidebarContent({ activeId, onSelect, onBack }) {
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme()
+  return (
+    <button
+      onClick={toggleTheme}
+      title="Toggle theme"
+      className="rounded-lg border border-border bg-surface-2 p-2 text-text-dim transition hover:text-text"
+    >
+      {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
+  )
+}
+
+function SidebarContent({ activeId, onSelect, onBack, onSearch }) {
   return (
     <>
       <div className="flex items-center justify-between border-b border-border px-5 py-5">
@@ -79,12 +168,28 @@ function SidebarContent({ activeId, onSelect, onBack }) {
             <p className="text-xs text-text-dim">Frontend utility generators</p>
           </div>
         </div>
+        <div className="flex items-center gap-1.5">
+          <ThemeToggle />
+          <button
+            onClick={onBack}
+            title="Back to home"
+            className="rounded-lg border border-border bg-surface-2 p-1.5 text-text-dim transition hover:text-text"
+          >
+            <ArrowLeft size={15} />
+          </button>
+        </div>
+      </div>
+
+      <div className="px-3 pt-3">
         <button
-          onClick={onBack}
-          title="Back to home"
-          className="rounded-lg border border-border bg-surface-2 p-1.5 text-text-dim transition hover:text-text"
+          onClick={onSearch}
+          className="flex w-full items-center gap-2 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-dim transition hover:text-text"
         >
-          <ArrowLeft size={15} />
+          <Search size={14} />
+          Search tools...
+          <kbd className="ml-auto rounded border border-border bg-surface px-1.5 py-0.5 text-[10px]">
+            ⌘K
+          </kbd>
         </button>
       </div>
 

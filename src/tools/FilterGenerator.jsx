@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ToolLayout from '../components/ToolLayout.jsx'
-import PreviewBox from '../components/PreviewBox.jsx'
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx'
 import SectionCard from '../components/SectionCard.jsx'
 import CodeBlock from '../components/CodeBlock.jsx'
 import Slider from '../components/Slider.jsx'
@@ -18,6 +18,8 @@ const DEFAULTS = {
   invert: 0,
   opacity: 100,
 }
+
+const PREVIEW_BG = 'bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600'
 
 export default function FilterGenerator() {
   const [f, setF] = useState(DEFAULTS)
@@ -39,8 +41,18 @@ export default function FilterGenerator() {
 
   const code = `filter: ${filterValue};`
 
+  const sampleContent = (style) => (
+    <div
+      className={`flex h-full w-full items-center justify-center ${PREVIEW_BG}`}
+      style={style}
+    >
+      <span className="text-2xl font-bold text-white drop-shadow-lg">Preview</span>
+    </div>
+  )
+
   return (
     <ToolLayout
+      toolId="filter"
       title="Filter Generator"
       description="Combine CSS filter functions and preview the result live."
       controls={
@@ -62,14 +74,11 @@ export default function FilterGenerator() {
         </SectionCard>
       }
       preview={
-        <PreviewBox height="h-80">
-          <div
-            className="flex h-full w-full items-center justify-center bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600"
-            style={{ filter: filterValue }}
-          >
-            <span className="text-2xl font-bold text-white">Preview</span>
-          </div>
-        </PreviewBox>
+        <BeforeAfterSlider
+          height="h-80"
+          before={sampleContent({})}
+          after={sampleContent({ filter: filterValue })}
+        />
       }
       code={<CodeBlock code={code} />}
     />

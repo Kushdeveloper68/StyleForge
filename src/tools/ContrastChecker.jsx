@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ToolLayout from '../components/ToolLayout.jsx'
-import PreviewBox from '../components/PreviewBox.jsx'
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx'
 import SectionCard from '../components/SectionCard.jsx'
 import CodeBlock from '../components/CodeBlock.jsx'
 import ColorInput from '../components/ColorInput.jsx'
@@ -48,6 +48,7 @@ export default function ContrastChecker() {
 
   return (
     <ToolLayout
+      toolId="contrast"
       title="Color Contrast Checker"
       description="Check WCAG AA / AAA contrast compliance between text and background colors."
       controls={
@@ -77,16 +78,21 @@ export default function ContrastChecker() {
         </SectionCard>
       }
       preview={
-        <PreviewBox height="h-60">
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-6" style={{ background: bg }}>
-            <span style={{ color: fg }} className="text-2xl font-bold">
-              The quick brown fox
-            </span>
-            <span style={{ color: fg }} className="text-sm">
-              jumps over the lazy dog
-            </span>
-          </div>
-        </PreviewBox>
+        <BeforeAfterSlider
+          height="h-60"
+          before={
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-6 bg-surface">
+              <span className="text-2xl font-bold text-text-dim">The quick brown fox</span>
+              <span className="text-sm text-text-dim">jumps over the lazy dog</span>
+            </div>
+          }
+          after={
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-6" style={{ background: bg }}>
+              <span style={{ color: fg }} className="text-2xl font-bold">The quick brown fox</span>
+              <span style={{ color: fg }} className="text-sm">jumps over the lazy dog</span>
+            </div>
+          }
+        />
       }
       code={<CodeBlock code={code} />}
     />

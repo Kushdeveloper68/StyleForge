@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ToolLayout from '../components/ToolLayout.jsx'
-import PreviewBox from '../components/PreviewBox.jsx'
+import BeforeAfterSlider from '../components/BeforeAfterSlider.jsx'
 import SectionCard from '../components/SectionCard.jsx'
 import CodeBlock from '../components/CodeBlock.jsx'
 import Slider from '../components/Slider.jsx'
@@ -16,6 +16,7 @@ export default function BackdropFilterGenerator() {
 
   return (
     <ToolLayout
+      toolId="backdrop-filter"
       title="Backdrop Filter Generator"
       description="Apply blur and color adjustments to whatever sits behind an element."
       controls={
@@ -29,19 +30,34 @@ export default function BackdropFilterGenerator() {
         </SectionCard>
       }
       preview={
-        <PreviewBox height="h-80" className="relative bg-[url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800')] bg-cover bg-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-accent/60 via-purple-500/60 to-accent-2/60" />
-          <div
-            className="relative z-10 flex h-32 w-56 items-center justify-center rounded-2xl border border-white/30 text-sm font-medium text-white"
-            style={{
-              backdropFilter: value,
-              WebkitBackdropFilter: value,
-              background: 'rgba(255,255,255,0.1)',
-            }}
-          >
-            Backdrop filter applied
-          </div>
-        </PreviewBox>
+        <BeforeAfterSlider
+          height="h-80"
+          before={
+            <div
+              className="flex h-full w-full items-center justify-center bg-cover bg-center"
+              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800')" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/60 via-purple-500/60 to-accent-2/60" />
+              <div className="relative z-10 flex h-32 w-56 items-center justify-center rounded-2xl border border-white/30 bg-white/10 text-sm font-medium text-white">
+                No backdrop filter
+              </div>
+            </div>
+          }
+          after={
+            <div
+              className="flex h-full w-full items-center justify-center bg-cover bg-center"
+              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800')" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/60 via-purple-500/60 to-accent-2/60" />
+              <div
+                className="relative z-10 flex h-32 w-56 items-center justify-center rounded-2xl border border-white/30 text-sm font-medium text-white"
+                style={{ backdropFilter: value, WebkitBackdropFilter: value, background: 'rgba(255,255,255,0.1)' }}
+              >
+                Backdrop filter applied
+              </div>
+            </div>
+          }
+        />
       }
       code={<CodeBlock code={code} />}
     />
