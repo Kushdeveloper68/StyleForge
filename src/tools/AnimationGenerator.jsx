@@ -6,7 +6,9 @@ import CodeBlock from '../components/CodeBlock.jsx'
 import Slider from '../components/Slider.jsx'
 import ToggleGroup from '../components/ToggleGroup.jsx'
 import Button from '../components/Button.jsx'
+import DiceButton from '../components/DiceButton.jsx'
 import { RotateCw } from 'lucide-react'
+import { randomizers } from '../utils/randomizers.js'
 
 const PRESETS = {
   bounce: {
@@ -64,6 +66,15 @@ export default function AnimationGenerator() {
               value={preset}
               onChange={setPreset}
             />
+            <div className="mt-3">
+              <DiceButton onClick={() => {
+                const r = randomizers.animation()
+                setPreset(r.preset)
+                setDuration(r.duration)
+                setTiming(r.timing)
+                setReplayKey(k => k + 1)
+              }} />
+            </div>
           </SectionCard>
 
           <SectionCard title="Timing">

@@ -1,5 +1,6 @@
-import { ArrowRight, Sparkles, Blend, Square, Move3d, Shapes, Contrast, MousePointer2 } from 'lucide-react'
+import { ArrowRight, Sparkles, Blend, Square, Move3d, Shapes, Contrast, MousePointer2, Sun, Moon } from 'lucide-react'
 import { CATEGORIES } from '../utils/tools.js'
+import { useTheme } from '../context/ThemeContext.jsx'
 
 const FEATURE_HIGHLIGHTS = [
   { icon: Blend, title: 'Gradient & Effects', desc: 'Gradients, shadows, glass, neumorphism, masks, noise.' },
@@ -12,6 +13,7 @@ const FEATURE_HIGHLIGHTS = [
 
 export default function LandingPage({ onEnter }) {
   const totalTools = CATEGORIES.reduce((sum, c) => sum + c.tools.length, 0)
+  const { theme, toggleTheme } = useTheme()
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -19,15 +21,24 @@ export default function LandingPage({ onEnter }) {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-2">
           <Sparkles size={22} className="text-accent" />
-          <span className="text-lg font-semibold tracking-tight">CSS Toolkit</span>
+          <span className="text-lg font-semibold tracking-tight">StyleForge</span>
         </div>
-        <button
-          onClick={onEnter}
-          className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-4 py-2 text-sm font-medium text-text-dim transition hover:border-accent/50 hover:text-text"
-        >
-          Open App
-          <ArrowRight size={14} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            title="Toggle theme"
+            className="rounded-lg border border-border bg-surface-2 p-2 text-text-dim transition hover:text-text"
+          >
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          <button
+            onClick={onEnter}
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-2 px-4 py-2 text-sm font-medium text-text-dim transition hover:border-accent/50 hover:text-text"
+          >
+            Open App
+            <ArrowRight size={14} />
+          </button>
+        </div>
       </header>
 
       {/* Hero */}
