@@ -6,6 +6,8 @@ import CodeBlock from '../components/CodeBlock.jsx'
 import ColorInput from '../components/ColorInput.jsx'
 import Slider from '../components/Slider.jsx'
 import ToggleGroup from '../components/ToggleGroup.jsx'
+import DiceButton from '../components/DiceButton.jsx'
+import { randomizers } from '../utils/randomizers.js'
 
 const STYLES = ['solid', 'gradient', 'outline', 'glass', 'neon']
 
@@ -84,6 +86,15 @@ export default function ButtonGenerator() {
         <>
           <SectionCard title="Style">
             <ToggleGroup options={STYLES} value={style} onChange={setStyle} />
+            <div className="mt-3">
+              <DiceButton onClick={() => {
+                const r = randomizers.button()
+                setStyle(r.style)
+                setColor1(r.color1)
+                setColor2(r.color2)
+                setRadius(r.radius)
+              }} />
+            </div>
           </SectionCard>
           <SectionCard title="Colors">
             <div className="space-y-4">
