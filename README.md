@@ -1,4 +1,4 @@
-# CSS Toolkit
+# StyleForge
 
 An all-in-one CSS helper website built with React + Vite + Tailwind CSS v4.
 Includes 18 tab-based generators: Gradient, Box Shadow, Border Radius, Border,
